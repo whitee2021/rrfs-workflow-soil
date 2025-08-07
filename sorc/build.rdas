@@ -42,6 +42,8 @@ EXEC3="${HOMErrfs}/sorc/RDASApp/build/bin/mpasjedi_enkf.x"
 EXEC4="${HOMErrfs}/sorc/RDASApp/build/bin/bufr2netcdf.x"
 cd "${HOMErrfs}/sorc/RDASApp" || exit 1
 
+cp ../_workaround_/Registry.xml sorc/mpas/src/core_atmosphere
+
 # workaround for ramp option in ObsErrorFactorPressureCheck
 # https://github.com/JCSDA-internal/ufo/pull/3705 by Sijie
 cp ../_workaround_/RDASApp/ObsErrorFactorPressureCheck.cc sorc/ufo/src/ufo/filters/obsfunctions/ObsErrorFactorPressureCheck.cc
@@ -74,4 +76,10 @@ cp "${EXEC3}" "${HOMErrfs}/exec/mpasjedi_enkf.x"
 
 echo "copy ${EXEC4} to ../exec/bufr2netcdf.x"
 cp "${EXEC4}" "${HOMErrfs}/exec/bufr2netcdf.x"
+
+module use "RDASApp/modulefiles"
+module load "RDAS/${MACHINE}.intel"
+g++ sorc/soil_dummy.cc -L/contrib/spack-stack/spack-stack-1.6.0/envs/unified-env-rocky8/install/intel/2021.5.0/netcdf-cxx4-4.3.1-wba23ef/lib -L/contrib/spack-stack/spack-stack-1.6.0/envs/unified-env-rocky8/install/intel/2021.5.0/netcdf-c-4.9.2-ejp7j3k/lib -lnetcdf -o ../../exec/soil_dummy.x
+g++ sorc/soil_recombine.cc -L/contrib/spack-stack/spack-stack-1.6.0/envs/unified-env-rocky8/install/intel/2021.5.0/netcdf-cxx4-4.3.1-wba23ef/lib -L/contrib/spack-stack/spack-stack-1.6.0/envs/unified-env-rocky8/install/intel/2021.5.0/netcdf-c-4.9.2-ejp7j3k/lib -lnetcdf -o ../../exec/soil_recombine.x
+
 exit 0

@@ -1,6 +1,6 @@
 _member: &memberConfig
   date: &analysisDate '@analysisDate@'
-  state variables: &incvars [water_vapor_mixing_ratio_wrt_moist_air, air_pressure_at_surface, air_temperature, northward_wind, eastward_wind, cloud_liquid_water, cloud_liquid_ice, rain_water, snow_water, graupel, equivalent_reflectivity_factor, upward_air_velocity]
+  state variables: &incvars [water_vapor_mixing_ratio_wrt_moist_air, air_pressure_at_surface, air_temperature, northward_wind, eastward_wind, cloud_liquid_water, cloud_liquid_ice, rain_water, snow_water, graupel, equivalent_reflectivity_factor, upward_air_velocity, SM1, SM2, SM3, SM4, SM5, SM6, SM7, SM8, SM9, ST1, ST2, ST3, ST4, ST5, ST6, ST7, ST8, ST9]
   stream name: ensemble
 
 output:
@@ -72,7 +72,25 @@ cost function:
     - equivalent_reflectivity_factor
     - w
     - upward_air_velocity
-    filename: mpasout.nc
+    - SM1
+    - SM2
+    - SM3
+    - SM4
+    - SM5
+    - SM6
+    - SM7
+    - SM8
+    - SM9
+    - ST1
+    - ST2
+    - ST3
+    - ST4
+    - ST5
+    - ST6
+    - ST7
+    - ST8
+    - ST9
+    filename: mpasin.nc
     date: *analysisDate
   background error:
     covariance model: hybrid
@@ -133,7 +151,8 @@ cost function:
             active variables: *incvars
             read:
               io:
-                data directory: data/bumploc
+                data directory: .
+                #data/bumploc
                 files prefix: bumploc
               drivers:
                 multivariate strategy: duplicated

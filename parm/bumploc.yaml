@@ -1,5 +1,5 @@
 _output config: &outputConfig
-  date: &validDate '2024-05-27T00:00:00Z'
+  date: &validDate '@analysisDate@'
   stream name: control
 geometry:
   nml_file: "./namelist.atmosphere"
@@ -7,8 +7,10 @@ geometry:
   deallocate non-da fields: true
   bump vunit: "modellevel" # modellevel, height
 background:
-  state variables: &vars [spechum,surface_pressure,temperature,uReconstructMeridional,uReconstructZonal]
-  filename: "./data/restart.2024-05-27_00.00.00.nc"
+  state variables: &vars [water_vapor_mixing_ratio_wrt_moist_air, air_pressure_at_surface, air_temperature, northward_wind, eastward_wind, SM1, SM2, SM3, SM4, SM5, SM6, SM7, SM8, SM9, ST1, ST2, ST3, ST4, ST5, ST6, ST7, ST8, ST9]
+  #[spechum,surface_pressure,temperature,uReconstructMeridional,uReconstructZonal]
+  filename: ./mpasin.nc
+  #"./data/restart.2024-05-27_00.00.00.nc"
   date: *validDate
 
 background error:
@@ -18,7 +20,8 @@ background error:
     saber block name: BUMP_NICAS
     calibration:
       io:
-        files prefix: bumploc_401km11levels
+        files prefix: bumploc
+        #_401km11levels
 
       drivers:
         multivariate strategy: duplicated

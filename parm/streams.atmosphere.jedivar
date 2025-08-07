@@ -8,7 +8,7 @@
 
 <immutable_stream name="input"
                   type="input"
-                  filename_template="init.nc"
+                  filename_template="mpasin.nc"
                   io_type="pnetcdf,cdf5"
                   input_interval="initial_only" />
 
@@ -16,7 +16,7 @@
         type="input;output"
         precision="single"
         clobber_mode="truncate"
-        filename_template="mpasout.nc"
+        filename_template="mpasin_orig.nc"
         packages="jedi_da"
         io_type="pnetcdf,cdf5"
         input_interval="initial_only"
@@ -32,7 +32,7 @@
         input_interval="none"
         output_interval="none"
         clobber_mode="overwrite">
-        <file name="stream_list/stream_list.atmosphere.background"/>
+        <file name="stream_list/stream_list.atmosphere.background.new"/>
 </stream>
 
 <stream name="analysis"
@@ -42,7 +42,7 @@
         filename_template="foo2.nc"
         output_interval="none"
         clobber_mode="overwrite">
-        <file name="stream_list/stream_list.atmosphere.analysis"/>
+        <file name="stream_list/stream_list.atmosphere.analysis.new"/>
 </stream>
 
 <stream name="ensemble"
@@ -53,7 +53,7 @@
         input_interval="none"
         output_interval="none"
         clobber_mode="overwrite">
-        <file name="stream_list/stream_list.atmosphere.ensemble"/>
+        <file name="stream_list/stream_list.atmosphere.ensemble.new"/>
 </stream>
 
 <stream name="control"

@@ -20,7 +20,7 @@ if [[ -r "${UMBRELLA_PREP_IC_DATA}/init.nc" ]]; then
 else
   start_type='warm'
   do_DAcycling='true'
-  initial_file=${UMBRELLA_PREP_IC_DATA}/mpasout.nc
+  initial_file=${UMBRELLA_PREP_IC_DATA}/mpasin.nc
 fi
 #
 # link fix files from physics, meshes, graphinfo, stream list, and jedi
@@ -96,6 +96,8 @@ ${cpreq} "${PARMrrfs}"/streams.atmosphere.jedivar streams.atmosphere
 analysisDate=""${CDATE:0:4}-${CDATE:4:2}-${CDATE:6:2}T${CDATE:8:2}:00:00Z""
 CDATEm2=$(${NDATE} -2 "${CDATE}")
 beginDate=""${CDATEm2:0:4}-${CDATEm2:4:2}-${CDATEm2:6:2}T${CDATEm2:8:2}:00:00Z""
+
+#${cpreq} "${PARMrrfs}"/bumploc.yaml bumploc.yaml
 #
 # generate jedivar.yaml based on how YAML_GEN_METHOD is set
 case ${YAML_GEN_METHOD:-1} in
@@ -114,6 +116,16 @@ case ${YAML_GEN_METHOD:-1} in
     ;;
 esac
 
+source "${USHrrfs}"/update_streams.sh
+cp mpasin.nc mpasin_orig.nc
+#module purge
+#module load nco
+#module list
+#/scratch3/BMC/wrfruc/ewhite/make_rrfs_dummy_para.py $PWD jedivar
+#module use "${HOMErrfs}/sorc/RDASApp/modulefiles"
+#module load "RDAS/${MACHINE}.intel"
+"${EXECrrfs}"/soil_dummy.x $timestr
+
 if [[ ${start_type} == "warm" ]] || [[ ${start_type} == "cold" && ${COLDSTART_CYCS_DO_DA} == "true" ]]; then
   # run mpasjedi_variational.x
   #export OOPS_TRACE=1
@@ -121,6 +133,9 @@ if [[ ${start_type} == "warm" ]] || [[ ${start_type} == "cold" && ${COLDSTART_CY
   export OMP_NUM_THREADS=1
 
   source prep_step
+  ${cpreq} "${HOMErrfs}"/sorc/RDASApp/build/bin/mpasjedi_error_covariance_toolbox.x .
+  ${MPI_RUN_CMD} ./mpasjedi_error_covariance_toolbox.x bumploc.yaml
+
   ${cpreq} "${EXECrrfs}"/mpasjedi_variational.x .
   ${MPI_RUN_CMD} ./mpasjedi_variational.x jedivar.yaml log.out
   # check the status
@@ -136,9 +151,15 @@ if [[ ${start_type} == "warm" ]] || [[ ${start_type} == "cold" && ${COLDSTART_CY
     err_chk
     mv tmp.nc "$(readlink -f init.nc)"
     mv ana.nc ..
-  else
-    cp "${DATA}"/mpasout.nc "${COMOUT}/jedivar/${WGF}/mpasout.${timestr}.nc"
   fi
+
+  #module purge
+  #module load nco
+  #module list
+  #/scratch3/BMC/wrfruc/ewhite/recombine_rrfs.py $PWD jedivar
+  "${EXECrrfs}"/soil_recombine.x
+
+  cp "${DATA}"/mpasout.nc "${COMOUT}/jedivar/${WGF}/mpasout.${timestr}.nc"
   #
   # the input/output file are linked from the umbrella directory, so no need to copy
   cp "${DATA}"/jdiag* "${COMOUT}/jedivar/${WGF}"
@@ -170,6 +191,5 @@ if (( ${#satbias_list[@]} > 0 )); then
   cp "${DATA}"/data/satbias_out/*satbias*.nc "${COMOUT}/jedivar/${WGF}"
 fi
 eval "${nullglob_save}" # Restore previous nullglob state
-
 
 exit 0

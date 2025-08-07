@@ -319,6 +319,60 @@ fields:
   - field name: soil_temperature
     mpas template field: u10
 
+  - field name: SM1
+    mpas template field: u10
+
+  - field name: SM2
+    mpas template field: u10
+
+  - field name: SM3
+    mpas template field: u10
+
+  - field name: SM4
+    mpas template field: u10
+
+  - field name: SM5
+    mpas template field: u10
+
+  - field name: SM6
+    mpas template field: u10
+
+  - field name: SM7
+    mpas template field: u10
+
+  - field name: SM8
+    mpas template field: u10
+
+  - field name: SM9
+    mpas template field: u10
+
+  - field name: ST1
+    mpas template field: u10
+
+  - field name: ST2
+    mpas template field: u10
+
+  - field name: ST3
+    mpas template field: u10
+
+  - field name: ST4
+    mpas template field: u10
+
+  - field name: ST5
+    mpas template field: u10
+
+  - field name: ST6
+    mpas template field: u10
+
+  - field name: ST7
+    mpas template field: u10
+
+  - field name: ST8
+    mpas template field: u10
+
+  - field name: ST9
+    mpas template field: u10
+
   - field name: water_area_fraction
     mpas template field: u10
 
