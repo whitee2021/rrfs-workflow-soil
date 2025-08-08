@@ -81,7 +81,7 @@ int main(int argc, char *argv[]) {
         make_dummy(fname);
     }
     const char* prep_ic_umbrella = getenv("UMBRELLA_PREP_IC_DATA");
-    sprintf(fname, "%s/mpasin.nc", prep_ic_umbrella);
+    sprintf(fname, "%s/mpasout.nc", prep_ic_umbrella);
     make_dummy(fname);
 }
 
